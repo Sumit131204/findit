@@ -1,17 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Box,
-} from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import MenuIcon from "@mui/icons-material/Menu";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useAuth } from "../context/AuthContext";
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: "#ffffff",
@@ -31,13 +21,6 @@ const Logo = styled(Typography)({
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { authState, logout } = useAuth();
-  const { isAuthenticated } = authState;
-
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <StyledAppBar position="static">
@@ -46,33 +29,14 @@ const Header: React.FC = () => {
           Find<span>It</span>
         </Logo>
 
-        {isAuthenticated ? (
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Button color="inherit" onClick={() => navigate("/")}>
-              Home
-            </Button>
-            <Button color="inherit" onClick={() => navigate("/map")}>
-              Map
-            </Button>
-            <IconButton
-              color="inherit"
-              edge="end"
-              onClick={handleLogout}
-              sx={{ ml: 1 }}
-            >
-              <LogoutIcon />
-            </IconButton>
-          </Box>
-        ) : (
-          <Box>
-            <Button color="inherit" onClick={() => navigate("/login")}>
-              Login
-            </Button>
-            <Button color="inherit" onClick={() => navigate("/signup")}>
-              Sign Up
-            </Button>
-          </Box>
-        )}
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Button color="inherit" onClick={() => navigate("/")}>
+            Home
+          </Button>
+          <Button color="inherit" onClick={() => navigate("/map")}>
+            Map
+          </Button>
+        </Box>
       </Toolbar>
     </StyledAppBar>
   );

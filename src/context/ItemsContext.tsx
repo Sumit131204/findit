@@ -6,7 +6,6 @@ import React, {
   ReactNode,
 } from "react";
 import { Item } from "../types";
-import { useAuth } from "./AuthContext";
 import { itemsAPI } from "../services/api";
 
 interface ItemsContextType {
@@ -36,35 +35,29 @@ interface ItemsProviderProps {
 }
 
 export const ItemsProvider: React.FC<ItemsProviderProps> = ({ children }) => {
-  const { authState } = useAuth();
   const [items, setItems] = useState<Item[]>([]);
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load items when user is authenticated
+  // Load items when component mounts
   useEffect(() => {
     const fetchItems = async () => {
-      if (authState.isAuthenticated) {
-        setLoading(true);
-        setError(null);
+      setLoading(true);
+      setError(null);
 
-        try {
-          const fetchedItems = await itemsAPI.getItems();
-          setItems(fetchedItems);
-          setLoading(false);
-        } catch (err) {
-          setError("Failed to fetch items");
-          setLoading(false);
-        }
-      } else {
-        setItems([]);
-        setSelectedItem(null);
+      try {
+        const fetchedItems = await itemsAPI.getItems();
+        setItems(fetchedItems);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch items");
+        setLoading(false);
       }
     };
 
     fetchItems();
-  }, [authState.isAuthenticated]);
+  }, []);
 
   const addItem = async (item: Omit<Item, "id">) => {
     try {
